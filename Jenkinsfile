@@ -17,7 +17,7 @@ pipeline {
             sh "echo $PASS | docker login -u $USER --password-stdin"
             sh "docker push mouner0x/webapp:v${build_number}"
 
-            sh "kubectl apply -f deployment.yml"
+            sh "kubectl apply -f Deployment.yml"
             sh "kubectl apply -f svc.yml"
 
             sh "kubectl set image deployment/deploy-app webapp=mouner0x/webapp:v${build_number}"
