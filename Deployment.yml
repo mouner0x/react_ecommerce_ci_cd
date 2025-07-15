@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: mouner0x/webapp:v1
+        image: mouner0x/webapp:latest
