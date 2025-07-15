@@ -12,6 +12,11 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
+
+          
+          
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+
           
           sh "echo $pass | docker login -u $user --password-stdin"
           sh "docker push mouner0x/webapp:v${build_number}"
