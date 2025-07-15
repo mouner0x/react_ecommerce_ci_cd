@@ -1,15 +1,29 @@
-pipeline{
-
+pipeline {
   agent any
-  stages{
-    stage("build")
-    docker build -t mouner0x/webapp:v${build_number} .
-stage("deploy"){
-  docker login -u $user -p $pass
-  docker push mouner0x/webapp:v${build_number}
-  kubectl apply -f deployment.yml
-    kubectl apply -f svc.yml
+  stages {
+    stage('Build') {
+      steps {
+        script {
+          sh "docker build -t mouner0x/webapp:v${build_number} ."
+        }
+      }
+    }
 
-}
-  
+    stage('Deploy') {
+      steps {
+        script {
+          
+          sh "echo $pass | docker login -u $user --password-stdin"
+          sh "docker push mouner0x/webapp:v${build_number}"
+
+          sh "kubectl apply -f deployment.yml"
+          sh "kubectl apply -f svc.yml"
+
+          sh "kubectl set image deployment/deploy-app webapp=mouner0x/webapp:v${build_number}"
+
+          sh "kubectl rollout status deployment/deploy-app"
+        }
+      }
+    }
+  }
 }
